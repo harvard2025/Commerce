@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prro.Auction</title>
+    <!-- تضمين Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
+          crossorigin="anonymous">
+    <!-- تضمين ملف CSS مخصص -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    
+    <style>
+        /* تنسيق عام للصفحة */
+        body {
+            margin: 0;
+            
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+        /* تنسيق الناف بار المخصص وثباته أعلى الصفحة */
+        .custom-nav {
+            background: linear-gradient(90deg, #000000 0%, #202020 50%, #110e0e 100%);
+            padding: 10px 20px;
+            color: #fff;
+            position: fixed; /* تثبيت الناف بار */
+            top: 0;
+            width: 100%;
+            z-index: 9999;
+            margin-bottom: 20px;
+            box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.267);
+        }
+        .custom-nav a {
+            color: #fff;
+            margin: 0 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .custom-nav a:hover {
+            color: rgb(255, 183, 0);
+            scale: 1.1;
+        }
+        .logo-img {
+            width: 100px;
+            border: 3px solid black;
+            border-radius: 30px;
+        }
+        /* تنسيق محتوى الصفحة مع ترك مسافة كافية من أعلى الصفحة حتى لا يختفي خلف الناف بار */
+        .container-content {
+            margin-top: 150px; /* تم ضبط المسافة لتناسب ارتفاع الناف بار */
+        }
+        .log_out{
+            border: 1px solid #f4f4f4;
+        }
+        .log_out:hover{
+            
+            background-color: rgb(161, 0, 0);
+            
+        }
+        .log_in{
+            border: 1px solid #f4f4f4;
+        }
+        .log_in:hover{
+            
+            background-color: rgb(0, 73, 99);
+            
+        }
+    </style>
+
+    {% block head %}
+    {% endblock head %}
+</head>
+<body>
+
+    <!-- ناف بار مخصص ثابت -->
+    <nav class="custom-nav d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+            <img src="{% static 'img/Prro Coders.jpg' %}" alt="Logo" class="logo-img">
+            <span class="ml-3">
+                {% if user.is_authenticated %}
+                    <strong>{{ user.username }}</strong>
+                {% else %}
+                <strong>Guest</strong>
+                    
+                {% endif %}
+            </span>
+        </div>
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+            </li>
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'WatchList' %}">Watch List</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link log_out" href="{% url 'logout' %}" style="color: #fff;">Log Out</a>
+                </li>
+            {% else %}
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link log_in" href="{% url 'login' %}" style="color: #fff;">Log In</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- محتوى الصفحة -->
+    <div class="container container-content">
+        {% block body %}
+        <!-- ضع هنا المحتوى الخاص بك -->
+        <h1>مرحبًا بكم في Prro.Auction</h1>
+        <p>هذا مثال على صفحة تصميم احترافية باستخدام Django Templates مع ناف بار ثابت.</p>
+        {% endblock %}
+    </div>
+
+    <!-- تضمين ملفات JS الخاصة بـ Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" 
+            integrity="sha384-J6qa4849blE2+poTn3wWv6DkM6s7MTq9e3Z9pM0Zt9G9v0P0Y1l7E1xZ+4P8eLg" 
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" 
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJg1GWhI8vK6L/ScSJnpfHIcQb2VQ6lfY4ZW7k5JZp6xg" 
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" 
+            integrity="sha384-6EgZCG9vDlxzJtYgsrR3mA8Wb2v1uGQ66g0tM9c9jEeXW/3SpCBME2+qeOeA/eV+" 
+            crossorigin="anonymous"></script>
+</body>
+</html>
