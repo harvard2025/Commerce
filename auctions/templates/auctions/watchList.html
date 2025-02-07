@@ -1,7 +1,27 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+<<<<<<< HEAD
     <h2>WatchList</h2>
+=======
+<style>
+    .card{
+        transition: 0.3s;
+        margin: 10px 10px 25px 10px;
+        box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.107);
+    }
+    .card:hover{
+        scale: 1.1;
+    }
+    .title{
+        text-align: center;
+        color: rgb(0, 0, 0);
+        font-weight: 900;
+        margin-bottom: 20px;
+    }
+</style>
+    <h2 class="title">WatchList</h2>
+>>>>>>> cbdbbbc715674a1bd07a9150e812b8de561da1b2
     <div class="row mx-3">
         {% for listing in Listings %}
             <div class="card" style="width: 18rem;">
