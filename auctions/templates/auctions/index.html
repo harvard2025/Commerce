@@ -1,0 +1,32 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+
+    <form action="{% url 'desplayCat' %}" method="POST" class="my-3">
+        {% csrf_token %}
+        <label for="category">Choose a Category</label>
+        <select name="category" id="category">
+            {% for cat in categories %}
+            <option value="{{cat}}">{{cat}}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Filter" class="btn btn-warning">
+    </form>
+    
+    <div class="row mx-3">
+        {% for listing in Listings %}
+            <div class="card" style="width: 18rem;">
+                <img src="{{listing.imageUrl}}" class="card-img-top" alt="{{listing.title}}">
+                <div class="card-body">
+                <h5 class="card-title">{{listing.title}}</h5>
+                <p class="card-text">{{listing.description}}</p>
+                <a href="{% url 'listing' listing.id %}" class="btn btn-success">Datails</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    
+{% endblock %}
+<!-- https//assets.pokemon.com/assets/cm2/img/pokemon/full/001.png -->
