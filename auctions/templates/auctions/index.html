@@ -1,7 +1,31 @@
 {% extends "auctions/layout.html" %}
 
+
+
+{% block head %}
+
+<style>
+    .card{
+        transition: 0.3s;
+        margin: 10px 10px 25px 10px;
+        box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.107);
+    }
+    .card:hover{
+        scale: 1.1;
+    }
+    .title{
+        text-align: center;
+        color: rgb(0, 0, 0);
+        font-weight: 900;
+    }
+</style>
+{% endblock head %}
+
+
+
 {% block body %}
-    <h2>Active Listings</h2>
+    <h2 class="title">Active Listings</h2>
+    
 
     <form action="{% url 'desplayCat' %}" method="POST" class="my-3">
         {% csrf_token %}
@@ -19,8 +43,9 @@
             <div class="card" style="width: 18rem;">
                 <img src="{{listing.imageUrl}}" class="card-img-top" alt="{{listing.title}}">
                 <div class="card-body">
-                <h5 class="card-title">{{listing.title}}</h5>
+                <h5 class="card-title"><strong>{{listing.title}}</strong></h5>
                 <p class="card-text">{{listing.description}}</p>
+                <h5><strong>${{listing.price.bid}}</strong></h5>
                 <a href="{% url 'listing' listing.id %}" class="btn btn-success">Datails</a>
                 </div>
             </div>
