@@ -1,35 +1,40 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <div class="container">
-        {% if message %}
-            {% if update %}
-                <div class="alert alert-success">
-                    {{message}}
-                </div>
-            {% else %}
-                <div class="alert alert-danger">
-                    {{message}}
-                </div>
-            {% endif %}
+<div class="container my-5">
+    {% if message %}
+        {% if update %}
+            <div class="alert alert-success">
+                {{message}}
+            </div>
+        {% else %}
+            <div class="alert alert-danger">
+                {{message}}
+            </div>
         {% endif %}
-    </div>
+    {% endif %}
 
-        {% if not listing.isActive and user == listing.price.user %}
+    {% if not listing.isActive and user == listing.price.user %}
         <div class="alert alert-success">
-            Cangratoulation You Won The auction
+            Congratulations! You Won The Auction
         </div>
-        {% endif %}
+    {% endif %}
 
-    
-    <div class="row mx-3">
-        {% if user.is_authenticated and listing.isActive  %}
+    <div class="row mx-3 mb-4">
+        {% if user.is_authenticated and listing.isActive %}
             {% if isOwner %}
                 <form action="{% url 'closeAution' id=listing.id %}" method="POST" class="mx-3">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger">Close Auction</button>
                 </form>
             {% endif %}
+
+        {% endif %}
+
+
+
+        {% if user.is_authenticated %}
+
             {% if isListingInWatchList %}
                 <form action="{% url 'RemoveWatchList' id=listing.id %}" method="POST">
                     {% csrf_token %}
@@ -41,95 +46,146 @@
                     <button type="submit" class="btn btn-success">Add To Watch List</button>
                 </form>
             {% endif %}
-        {% endif %}
+    {% endif %}
     </div>
 
-    <h2>Listing: {{listing.title}}</h2>
-    <img src="{{listing.imageUrl}}" alt="{{listing.title}}" width="350px" height="400PX">
-    <p>{{listing.description}}</p>
-    <p>Owner: <strong>{{listing.owner}}</strong></p>
-    <h4>${{listing.price.bid}}</h4>
-    
-    
-
-
-
-
-    
+    <div class="text-center mb-5">
+        <h2 class="display-4">{{ listing.title }}</h2>
+        <img src="{{ listing.imageUrl }}" alt="{{ listing.title }}" class="img-fluid rounded shadow mb-4" style="max-width: 350px; max-height: 400px;">
+        <p>{{ listing.description }}</p>
+        <p><strong>Owner: </strong>{{ listing.owner }}</p>
+        <h4>${{ listing.price.bid }}</h4>
+    </div>
 
     {% if user.is_authenticated %}
         <br><br>
-
         <form action="{% url 'addBid' listing.id %}" method="post">
             {% csrf_token %}
-            
-            <div class="form_group">
-                <label for="title">Add a New Bid</label>
-                <input type="number" min='0' name="newBid" class="form-control" id="title" placeholder="Add a New Bid">
-                <button type="submit" class="btn btn-primary">Add</button>
+            <div class="form_group mb-3">
+                <label for="newBid" class="form-label">Add a New Bid</label>
+                <input type="number" name="newBid" class="form-control" id="newBid" min="0" placeholder="Enter your bid">
+                <button type="submit" class="btn btn-primary mt-3">Add Bid</button>
             </div>
-            
-            <div class="form-group">
-                
-            </div>
-
-
-        </form>
-
-
-
-
-        <br> 
-
-    {% endif %}
-    
-    
-
-
-
-
-
-
-
-
-    {% if user.is_authenticated %}
-        <br><hr>
-        <br>
-        <br>
-        <h2>Comments</h2>
-        <br>
-        <form action="{% url 'addComment' listing.id %}" method="post">
-            {% csrf_token %}
-            
-            <div class="form_group">
-                <label for="title">Add a New Comment</label>
-                <input type="text" name="newComment" class="form-control" id="title" placeholder="Add a New Comment">
-            </div>
-            <br>
-            <div class="form-group">
-                <button type="submit" class="btn btn-warning">Add</button>
-            </div>
-
-          
-
-
-
         </form>
     {% endif %}
 
+    <hr class="my-5">
 
-   
+    <div class="add_comments">
+        {% if user.is_authenticated %}
+            <form action="{% url 'addComment' listing.id %}" method="post">
+                {% csrf_token %}
+                <div class="form_group">
+                    <label for="newComment">Add a New Comment</label>
+                    <input type="text" name="newComment" class="form-control" id="newComment" placeholder="Add your comment here">
+                </div>
+                <button type="submit" class="btn btn-warning mt-3">Add Comment</button>
+            </form>
+        {% endif %}
+    </div>
+
+    <h2>Comments</h2>
     <ul class="list-group">
         {% for Comment in allComments %}
-        
-            <li class="list-group-item">
-                <h5><strong>{{Comment.message}}</strong></h5>
-                <br>
-                <p>Posted by: <strong>{{Comment.author}}</strong></p>
+            <li class="list-group-item shadow-sm my-3">
+                <h5><strong>{{ Comment.message }}</strong></h5>
+                <p>Posted by: <strong>{{ Comment.author }}</strong></p>
             </li>
-            
         {% endfor %}
     </ul>
-    
+</div>
+
+<style>
+    .add_comments {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        font-family: 'Roboto', sans-serif;
+        border: 1px solid #e5e5e5;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .add_comments:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        border-color: #ccc;
+    }
+
+    .form_group label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        color: #444;
+        background-color: #f9f9f9;
+        transition: border 0.3s ease, background-color 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #ff0000;
+        background-color: #fff;
+        outline: none;
+    }
+
+    .btn-warning {
+        background: linear-gradient(90deg, #ff3d00, #ff6e00);
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn-warning:hover {
+        background: linear-gradient(90deg, #ff6e00, #ff3d00);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-danger, .btn-success, .btn-primary {
+        padding: 12px 20px;
+        border-radius: 6px;
+        font-size: 16px;
+    }
+
+    .btn-danger {
+        background-color: #ff4d4d;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background-color: #e60000;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>
 {% endblock %}
-<!-- https//assets.pokemon.com/assets/cm2/img/pokemon/full/001.png -->
